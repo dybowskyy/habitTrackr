@@ -24,12 +24,16 @@ class HabitTrackerDatabase:
     def log_progress(self, habit_id, progress_date, status):
         self.cursor.execute("INSERT OR REPLACE INTO progress (habit_id, progress_date, status) VALUES (?, ?, ?)", (habit_id, progress_date, status))
         self.conn.commit()
-    def get_habit(self, habit_id):
-        pass
+    def get_habit(self, id):
+        self.cursor.execute("SELECT * FROM habits WHERE id = ?", (id,))
+        habit = self.cursor.fetchall()
+        return habit if habit else None
     def get_all_habits(self):
-        pass
+        self.cursor.execute("SELECT * FROM habits")
+        all_habits = self.cursor.fetchall()
+        return all_habits
     def close(self):
-        self.conn.commit()
         self.conn.close()
 
 habit_tracker = HabitTrackerDatabase()
+
